@@ -9,7 +9,10 @@
 	var wordHTML ="";
 
 	for(var i=0; i < animal.length; i++){
-			wordHTML = wordHTML + " _ ";
+			if (animal[i] == 'a') {
+				wordHTML = wordHTML + "a";
+			}else {
+				wordHTML = wordHTML + " _ ";
 	}
 
 	document.querySelector('#game').innerHTML = wordHTML;
