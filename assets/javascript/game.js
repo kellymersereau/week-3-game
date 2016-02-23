@@ -88,20 +88,28 @@ window.onload = function () {
 			["Michael Myers", "Jason's Mother", "Jigsaw", "Chuckie", "Dracula", "Jack The Ripper", "Freddy Krueger", "Zombies"]
 		];
 
-	chosenCategory=categories[Math.floor(Math.random() * categories.length)];
-	word=chosenCategory[Math.floor(Math.random() * chosenCategory.length)];
-	word=word.replace(/\s/g, "-");
-	console.log(word);
-	buttons();
+		chosenCategory=categories[Math.floor(Math.random() * categories.length)];
+		word=chosenCategory[Math.floor(Math.random() * chosenCategory.length)];
+		word=word.replace(/\s/g, "-");
+		console.log(word);
+		buttons();
 
-	
+		guesses=[];
+		lives=13;
+		counter=0;
+		space=0;
+		result();
+		comments();
+		selectCat();
 	}
 
-	var horror = horrorMovies[Math.floor(Math.random() * horrorMovies.length)];
-	var guessesLeft = 13;
-	var userGuesses =[];
+	play();
 
-	var wordHTML ="";
+	//hint
+
+	hint.onClick=function() {
+		
+	}
 
 		for(var i=0; i < horror.length; i++){
 			if (horror[i] == 'a') {
