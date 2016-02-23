@@ -66,11 +66,37 @@ window.onload = function () {
 			this.setAttribute("class","active");
 			this.onClick = null;
 			for(var i = 0; i <word.length; i++) {
-				if(word[i].innerHTML = guess)
+				if(word[i].innerHTML = guess){
+					guesses[1].innerHTML = guess;
+					counter += 1;
+				}
+			}
+			var j = (word.indexOf(guess));
+			if (j === -1) {
+				lives -= 1;
+				comments();
+			} else {
+				comments();
 			}
 		}
 	}
-	var horrorMovies = ["Scream", "Halloween", "Saw", "Nightmare on Elm Street", "The Last House on the Left", "I Know What You Did Last Summer", "Chuckie", "The Bride of Chuckie", "Alien", "The Purge", "Friday The 13th", "Zombeavers", "The Night of the Living Dead"];
+
+	//play
+	play=function(){
+		categories=[
+			["Scream", "Halloween", "Saw", "Nightmare on Elm Street", "The Last House on the Left", "I Know What You Did Last Summer", "Chuckie", "The Bride of Chuckie", "Alien", "The Purge", "Friday The 13th", "Zombeavers", "The Night of the Living Dead", "The Exorcist"];
+			["Michael Myers", "Jason's Mother", "Jigsaw", "Chuckie", "Dracula", "Jack The Ripper", "Freddy Krueger", "Zombies"]
+		];
+
+	chosenCategory=categories[Math.floor(Math.random() * categories.length)];
+	word=chosenCategory[Math.floor(Math.random() * chosenCategory.length)];
+	word=word.replace(/\s/g, "-");
+	console.log(word);
+	buttons();
+
+	
+	}
+
 	var horror = horrorMovies[Math.floor(Math.random() * horrorMovies.length)];
 	var guessesLeft = 13;
 	var userGuesses =[];
@@ -95,7 +121,4 @@ window.onload = function () {
 
 
 
-	// 3. we let the user guess a letter from the keyboard
-	// 	if the letter is in the word then
-	// 	we rebuild the view
-	// 4. if the user guesses all the letters then the user wins
+	
