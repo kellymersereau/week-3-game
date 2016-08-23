@@ -1,4 +1,14 @@
-
+* {
+  font-family: 'Droid Serif', serif;
+  text-align: center;
+}
+body {
+  background-color: #000;
+}
+.jumbotron {
+  background: #000;
+  color: #ff0000;
+}
 #alphabet {
   margin: 15px auto;
   padding: 0;
@@ -23,11 +33,16 @@
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   border-radius: 5px;
-  -khtml-border-radius: 5px;
+  -html-border-radius: 5px;
   border: solid 1px #fff;
 }
 #alphabet li:hover {
   background: #c1d72e;
   border: solid 1px #fff;
   color: #fff;
+}
+
+.horror {
+  font-family: 'Bangers', cursive;
+  font-size: 75px !important;
 }

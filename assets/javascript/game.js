@@ -1,119 +1,170 @@
-// Global Variables (accessible by all functions))
-// =========================================================
+var hangmanGame = {
+	wordsList: {
+		"scream": {
+			picture: 'scream.gif',
+			alt: 'Giphy of the 1997 film Scream'
+		},
+		"halloween": {
+			picture: 'halloween.gif',
+			alt: 'Giphy of the 1978 film Halloween'
+		},
+		"saw": {
+			picture: 'saw.gif',
+			alt: 'Giphy of the 2004 film Saw'
+		},
+		"chucky": {
+			picture: 'chuckie.gif',
+			alt: "Giphy of the main character from the 1988 film Child's Play"
+		},
+		"alien": {
+			picture: 'alien.gif',
+			alt: "Giphy of the 1978 film Alien"
+		},
+		"zombeavers": {
+			picture: 'zombeavers.gif',
+			alt: "Giphy of the 2014 film Zombeavers"
+		}
+	},
+	wordInPlay: null,
+	lettersInChosenWord: [],
+	matchedLetters: [],
+	guessedLetters: [],
+	guessesLeft: 0,
+	totalGuesses: 0,
+	letterGuessed: null,
+	wins: 0,
+	losses: 0,
+	numGuesses: 13,
+	startGame: function(){
+		// pick a random word
+		var objKeys = Object.keys(this.wordsList);
+		this.wordInPlay = objKeys[Math.floor(Math.random() * objKeys.length)]; 
 
-// Array of Word Options (all lowercase)
-var wordsList = ["scream", "halloween", "saw", "chuckie", "alien",  "zombeavers"];
-var alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
-        'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
-        't', 'u', 'v', 'w', 'x', 'y', 'z'];
-var chosenWord = "";//selected word to guess - solution
-var lettersInChosenWord = []; //this will break the solution into individual letters to be stored in array
-var numBlanks = 0; //This will be the number of blanks we show based on the solution
-var blanksAndSuccesses = []; // Holds a mix of blank and solved letters (ex: 'n, _ _, n, _') 
-var wrongGuesses =[]; //holds all of the wrong guesses
+		this.lettersInChosenWord = this.wordInPlay.split("");
 
-//Game counters
-var winCounter = 0;
-var lossCounter = 0;
-var numGuesses = 13;
+		this.rebuildWordView();
+		this.processUpdateTotalGuesses();
+	},
+	updatePage: function(letter) {
+		if (this.guessesLeft === 0){
+			this.updateLosses();
+		}else{
+			this.updateGuesses(letter);
 
-//functions
-function startGame(){
-	numGuesses = 13;
+			this.updateMatchedLetters(letter);
 
-	chosenWord = wordsList[Math.floor(Math.random() * wordsList.length)]; 
-	lettersInChosenWord = chosenWord.split(""); 
-	numBlanks = lettersInChosenWord.length; 
+			this.rebuildWordView();
 
-	console.log(chosenWord);
-
-	blanksAndSuccesses = []; 
-	wrongGuesses = []; 
-
-
-	for(var i=0; i <numBlanks; i++){
-		blanksAndSuccesses.push("_");
-	}
-
-	console.log(blanksAndSuccesses); 
-	document.getElementById("guessesLeft").innerHTML = numGuesses;
-
-
-	document.getElementById('wordblanks').innerHTML = blanksAndSuccesses.join(" ");
-
-
-	document.getElementById('wrongGuesses').innerHTML = wrongGuesses.join(" ");
-
-}
-
-
-function checkLetters(letter) {
-
-	var letterInWord = false; 
-	for (var i=0; i<numBlanks; i++) {
-		if (chosenWord[i] == letter) {
-			letterInWord = true; 
-		};
-	}
-
-
-	if (letterInWord) {
-
-		for(var i=0; i<numBlanks; i++){
-
-			if(chosenWord[i] == letter){
-				blanksAndSuccesses[i] = letter; 
+			if(this.updateWins() == true){
+				this.restartGame();
 			}
 		}
-	console.log(blanksAndSuccesses); 
+	},
+	updateGuesses: function(letter){
+		//if the letter isn't in the guessedLetters array and the letter is not in the lettersOfTheWord array then make guesses go down
 
+		if((this.guessedLetters.indexOf(letter) == -1) && (this.lettersInChosenWord.indexOf(letter) == -1)){
+			this.guessedLetters.push(letter);
+
+			this.guessesLeft--;
+
+			$('#guessesLeft').html(this.guessesLeft);
+			$('#wrongGuesses').html(this.guessedLetters.join(', '));
+		} 
+	},
+	processUpdateTotalGuesses: function(){
+		this.totalGuesses = this.lettersInChosenWord.length + 5;
+		this.guessesLeft = this.totalGuesses;
+
+		$('#guessesLeft').html(this.guessesLeft);
+	},
+	updateMatchedLetters: function(letter){
+		for(var i = 0; i < this.lettersInChosenWord.length; i++){
+			if((letter === this.lettersInChosenWord[i]) && (this.matchedLetters.indexOf(letter) == -1)){
+				this.matchedLetters.push(letter);
+				this.guessesLeft--;
+				$('#guessesLeft').html(this.guessesLeft);
+			};
+		};
+	},
+	rebuildWordView: function(){
+		var wordView = "";
+
+		for(var i=0; i < this.lettersInChosenWord.length; i++){
+			if(this.matchedLetters.indexOf(this.lettersInChosenWord[i]) != -1){
+				wordView += this.lettersInChosenWord[i];
+			} else{
+				wordView += '&nbsp;_&nbsp;';
+			}
+		}
+
+		$('#wordblanks').html(wordView);
+	},
+	restartGame: function(){
+		$('#wrongGuesses').html('');
+		this.wordInPlay = null;
+		this.lettersInChosenWord = [];
+		this.matchedLetters = [];
+		this.guessedLetters = [];
+		this.guessesLeft = 0;
+		this.totalGuesses = 0;
+		this.letterGuessed = null;
+		this.startGame();
+		this.rebuildWordView();
+	},
+	updateWins: function(){
+		if(this.matchedLetters.length == 0){
+			var win = false;
+		} else{
+			var win = true;
+		}
+
+		for(var i=0; i < this.lettersInChosenWord.length; i++){
+			if(this.matchedLetters.indexOf(this.lettersInChosenWord[i]) == -1){
+				win = false;
+			}
+		}
+
+		if(win == true){
+			this.wins = this.wins +1;
+
+			$("#winCounter").html(this.wins);
+
+			$('#winLossAlertBox').show();
+			setTimeout(function(){
+				$('#winLossAlertBox').hide();
+			}, 5000);
+
+			playWord = this.wordInPlay;
+			$('#winLossMessage').html('WINNER! The correct movie is ' + playWord + '.');
+			$('#giphySpace').html('<img class="movieImage img-responsive" src="assets/images/' + this.wordsList[this.wordInPlay].picture + '" alt="' + this.wordsList[this.wordInPlay].alt + '">');
+
+			return true;
+		} else{
+			return false;
+		}
+	},
+	updateLosses: function(){
+		this.losses = this.losses +1; 
+
+		$('#winLossAlertBox').show();
+		setTimeout(function(){
+			$('#winLossAlertBox').hide();
+		}, 5000);
+
+		$('#winLossMessage').html("You lost! The correct word is " + this.wordInPlay + ".");
+		$('#giphySpace').html("<img class='movieImage img-responsive' src='http://i.giphy.com/kjiOhgLVcie88.gif' alt='Ghostface from Scream shaking head No'>");
+
+		$('#lossCounter').html(this.losses);
+
+		this.restartGame();
 	}
+};
 
-	else {
-		wrongGuesses.push(letter); 
-		numGuesses--; 
-	}
-}
-
-
-function roundComplete() {
-
-
-	console.log("WinCount: " +winCounter + " | LossCount: " + lossCounter + " | NumGuesses: " + numGuesses);
-
-
-	document.getElementById("guessesLeft").innerHTML=numGuesses;
-	document.getElementById("wordblanks").innerHTML=blanksAndSuccesses.join(" "); 
-	document.getElementById("wrongGuesses").innerHTML=wrongGuesses.join(" ");
-
-
-	if(lettersInChosenWord.toString() == blanksAndSuccesses.toString()) {
-		winCounter++; 
-		alert("You win!"); 
-
-
-		document.getElementById("winCounter").innerHTML=winCounter;
-		startGame(); 
-	}
-
-
-	else if(numGuesses == 0){
-		lossCounter++; 
-		alert("You lose :("); 
-
-	
-		document.getElementById("lossCounter").innerHTML=lossCounter;
-		startGame(); 
-	}
-}
-
-
-startGame();
-
+hangmanGame.startGame();
 
 document.onkeyup = function(event){
-	letterGuessed = String.fromCharCode(event.keyCode).toLowerCase(); 
-	checkLetters(letterGuessed); 
-	roundComplete(); 
-}
+	hangmanGame.letterGuessed = String.fromCharCode(event.keyCode).toLowerCase(); 
+	hangmanGame.updatePage(hangmanGame.letterGuessed);
+};
 
