@@ -46,3 +46,28 @@ body {
   font-family: 'Bangers', cursive;
   font-size: 75px !important;
 }
+.guessesList {
+  font-family: 'Bangers', cursive;
+  font-size: 40px !important;
+  border: 1px solid #ffffff;
+  margin: 15px 20px 10px 45px;
+  max-width: 500px;
+  align-content: center;
+  align-items: center;
+}
+.numbersList {
+  font-family: 'Bangers', cursive;
+  font-size: 40px !important;
+  color: #ff0000;
+}
+
+@media screen and (max-width: 768px){
+  .guessesList {
+    max-width: 50%;
+    margin: 5px;
+    font-size: 50%;
+  }
+  .numbersList {
+    font-size: 20px;
+  }
+}
