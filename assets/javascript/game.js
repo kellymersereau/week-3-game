@@ -23,7 +23,44 @@ var hangmanGame = {
 		"zombeavers": {
 			picture: 'zombeavers.gif',
 			alt: "Giphy of the 2014 film Zombeavers"
+		},
+		'psycho': {
+			picture: 'psycho.gif',
+			alt: 'Giphy of the 1960 film Psycho'
+		},
+		'jaws': {
+			picture: 'jaws.gif',
+			alt: 'Giphy of the 1975 film Jaws'
+		},
+		'poltergeist': {
+			picture: 'poltergeist.gif',
+			alt: 'Giphy of the 1982 film Poltergeist'
+		},
+		'carrie': {
+			picture: 'carrie.gif',
+			alt: 'Giphy of the 1976 film Carrie'
+		},
+		'hellraiser': {
+			picture: 'hellraiser.gif',
+			alt: 'Giphy of the 1987 film Hellraiser'
+		},
+		'the exorcist': {
+			picture: 'the_exorcist.gif',
+			alt: "Giphy of the 1973 film The Exorcist"
+		},
+		'the shining': {
+			picture: 'the_shining.gif',
+			alt: 'The Shining'
+		},
+		'the texas chainsaw massacre': {
+			picture: 'texas.gif',
+			alt: 'The Texas Chainsaw Massacre'
+		},
+		'a nightmare on elm street': {
+			picture: 'nightmare.gif',
+			alt: "A Nightmare on Elm Street"
 		}
+
 	},
 	wordInPlay: null,
 	lettersInChosenWord: [],
@@ -91,11 +128,16 @@ var hangmanGame = {
 		var wordView = "";
 
 		for(var i=0; i < this.lettersInChosenWord.length; i++){
-			if(this.matchedLetters.indexOf(this.lettersInChosenWord[i]) != -1){
-				wordView += this.lettersInChosenWord[i];
+			if(this.lettersInChosenWord[i] === " "){
+				wordView += "&nbsp; &nbsp; &nbsp;";
 			} else{
-				wordView += '&nbsp;_&nbsp;';
+				if(this.matchedLetters.indexOf(this.lettersInChosenWord[i]) != -1){
+					wordView += this.lettersInChosenWord[i];
+				} else{
+					wordView += '&nbsp;_&nbsp;';
+				}
 			}
+
 		}
 
 		$('#wordblanks').html(wordView);
